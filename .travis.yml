@@ -1,0 +1,29 @@
+language: python
+
+# Use container-based infrastructure
+sudo: false
+
+python:
+ - pypy
+ - 2.7
+
+install:
+ - python setup.py install
+ - pip install coverage
+ - pip install pep8
+ - pip install pyflakes
+
+script:
+ - coverage run nose2 -v --fail-fast tests
+ - pyflakes .
+ - pep8 --statistics --count .
+
+after_success:
+    # Report coverage and send to coveralls.io
+  - pip install coveralls
+  - coverage report
+  - coveralls
+  - pyflakes .
+
+matrix:
+fast_finish: true
